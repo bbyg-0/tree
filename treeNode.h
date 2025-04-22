@@ -30,6 +30,8 @@ void showCurrentPath(treeAddress currentPath);
 
 void deleteNode(treeAddress * target);
 
+void massDelete(treeAddress * target);
+
 unsigned short getCurrentLevel(treeAddress currentPath);
 
 bool isEmpty (void * currentPath);

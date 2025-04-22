@@ -61,6 +61,7 @@ void showSons(treeAddress currentPath){
 	treeAddress temp = currentPath->sonAddress;
 
 	unsigned short i = 0;
+	printf("FOLDER:\n");
 	while(!isEmpty(temp)){
 		printf("%s\t", temp->folderName);
 		temp = temp->nextBrotherAddress;
@@ -88,6 +89,7 @@ void showCurrentPath(treeAddress currentPath){
 }
 
 void deleteNode(treeAddress * target){
+	if(isEmpty(*target)){printf("\nNULL POINTER\n"); return;}
 	if(!isEmpty((*target)->sonAddress)){printf("\nTHIS FOLDER IS NOT EMPTY\n"); return;}
 	if(isEmpty((*target)->prevBrotherAddress) && isEmpty((*target)->nextBrotherAddress)){
 		treeAddress temp = (*target)->parentAddress;
@@ -131,6 +133,18 @@ void deleteNode(treeAddress * target){
 	(*target)->parentAddress = NULL;
 
 	deAlokasi(target);
+}
+
+void massDelete(treeAddress * target){
+	if(isEmpty(*target) || isEmpty((*target)->sonAddress)){return;}
+
+	treeAddress temp = (*target)->sonAddress;
+	treeAddress temp1 = NULL;
+	while(!isEmpty((*target)->sonAddress)){
+		temp1 = temp->nextBrotherAddress;
+		deleteNode(&temp);
+		temp = temp1;
+	}
 }
 
 unsigned short getCurrentLevel(treeAddress currentPath){
