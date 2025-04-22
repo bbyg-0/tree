@@ -20,7 +20,13 @@ void createMemory(treeAddress * folderPointer);
 
 void nodeNaming(treeAddress * currentFolder, name newName);
 
+void showName(treeAddress folder);
+
 treeAddress searchTreeNode(treeAddress currentPath, name target);
+
+treeAddress searchTreeNodeSon(treeAddress currentPath, name target);
+
+treeAddress notLeafSon(treeAddress currentPath);
 
 void insertTreeNode(treeAddress * parent, treeAddress * son);
 
