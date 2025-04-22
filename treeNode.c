@@ -89,6 +89,15 @@ void showCurrentPath(treeAddress currentPath){
 
 void deleteNode(treeAddress * target){
 	if(!isEmpty((*target)->sonAddress)){printf("\nTHIS FOLDER IS NOT EMPTY\n"); return;}
+	if(isEmpty((*target)->prevBrotherAddress) && isEmpty((*target)->nextBrotherAddress)){
+		treeAddress temp = (*target)->parentAddress;
+		temp->sonAddress = NULL;
+		(*target)->parentAddress = NULL;
+
+
+		deAlokasi(target);
+		return;
+	}
 	if(isEmpty((*target)->prevBrotherAddress)){
 		treeAddress temp = (*target)->parentAddress;
 		treeAddress temp1 = (*target)->nextBrotherAddress;

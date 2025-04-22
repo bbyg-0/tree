@@ -30,25 +30,5 @@ int main(void){
 	nodeNaming(&pwd, "Public");
 	insertTreeNode(&root, &pwd);
 
-	pwd = searchTreeNode(root, "Pictures");
-	deleteNode(&pwd);
-	showSons(root);
-
-	pwd = searchTreeNode(root, "Public");
-	deleteNode(&pwd);
-	showSons(root);
-
-	pwd = searchTreeNode(root, "Videos");
-	deleteNode(&pwd);
-	showSons(root);
-
-	pwd = searchTreeNode(root, "Downloads");
-	deleteNode(&pwd);
-	showSons(root);
-
-	pwd = searchTreeNode(root, "Documents");
-	deleteNode(&pwd);
-	showSons(root);
-
 	return 0;
 }
