@@ -8,93 +8,61 @@ int main(void){
 	treeAddress f = NULL;
 
 	createMemory(&pwd);
-	nodeNaming(&pwd, "A");
+	nodeNaming(&pwd, "Root");
 	root = pwd;
 
-	/*
-	createMemory(&pwd);
-	nodeNaming(&pwd, "Downloads");
-	insertTreeNode(&root, &pwd);
-
-	createMemory(&pwd);
-	nodeNaming(&pwd, "Documents");
-	insertTreeNode(&root, &pwd);
-
-	createMemory(&pwd);
-	nodeNaming(&pwd, "Pictures");
-	insertTreeNode(&root, &pwd);
-
-	createMemory(&pwd);
-	nodeNaming(&pwd, "Videos");
-	insertTreeNode(&root, &pwd);
-
-	createMemory(&pwd);
-	nodeNaming(&pwd, "Public");
-	insertTreeNode(&root, &pwd);
-
-	pwd = searchTreeNode(root, "Documents");
-
 	createMemory(&f);
-	nodeNaming(&f, "PROJEK");
+	nodeNaming(&f, "FolderA");
 	insertTreeNode(&pwd, &f);
 
 	createMemory(&f);
-	nodeNaming(&f, "SDA");
+	nodeNaming(&f, "FolderB");
 	insertTreeNode(&pwd, &f);
 
 	createMemory(&f);
-	nodeNaming(&f, "TEKPRO");
-	insertTreeNode(&pwd, &f);
-	*/
-	createMemory(&f);
-	nodeNaming(&f, "B");	
+	nodeNaming(&f, "FolderC");
 	insertTreeNode(&pwd, &f);
 
-	createMemory(&f);
-	nodeNaming(&f, "C");	
-	insertTreeNode(&pwd, &f);
-
-	pwd = searchTreeNode(root, "B");
+	pwd = searchTreeNode(root, "FolderA");
 
 	createMemory(&f);
-	nodeNaming(&f, "D");	
-	insertTreeNode(&pwd, &f);
-
-	pwd = searchTreeNode(root, "C");
-
-	createMemory(&f);
-	nodeNaming(&f, "E");	
+	nodeNaming(&f, "FolderA1");
 	insertTreeNode(&pwd, &f);
 
 	createMemory(&f);
-	nodeNaming(&f, "F");	
+	nodeNaming(&f, "FolderA2");
 	insertTreeNode(&pwd, &f);
-	
-	pwd = searchTreeNode(root, "F");
+
+	pwd = searchTreeNode(root, "FolderA1");
 
 	createMemory(&f);
-	nodeNaming(&f, "G");	
+	nodeNaming(&f, "FolderA1a");
 	insertTreeNode(&pwd, &f);
 
-	printf("\nDEBUGGGGGGGGG\n");
+	pwd = searchTreeNode(root, "FolderB");
 
-	//dari root ke E
-//	pwd = searchTreeNode(root, "E");
-//	showSons(pwd);
+	createMemory(&f);
+	nodeNaming(&f, "FolderB1");
+	insertTreeNode(&pwd, &f);
 
-	//dari C ke G
-//	pwd = searchTreeNode(root, "C");
-//	pwd = searchTreeNode(pwd, "G");
-//	showSons(pwd);
+	createMemory(&f);
+	nodeNaming(&f, "FolderB2");
+	insertTreeNode(&pwd, &f);
 
-	//dari B ke G
-	//pwd = searchTreeNode(root, "B");
-	//pwd = searchTreeNode(pwd, "G");
-	//showSons(pwd);
+	pwd = searchTreeNode(root, "FolderB2");
 
-	//dari A ke Z
-	pwd = searchTreeNode(root, "Z");
-//	showSons(pwd);
+	createMemory(&f);
+	nodeNaming(&f, "FolderB2a");
+	insertTreeNode(&pwd, &f);
 
+	pwd = searchTreeNode(root, "FolderB2a");
+
+	createMemory(&f);
+	nodeNaming(&f, "FolderB2a1");
+	insertTreeNode(&pwd, &f);
+
+	pwd = searchTreeNode(root, "Root");
+
+	viewAllFolders(root, inOrder);
 	return 0;
 }

@@ -10,6 +10,64 @@ void failedMalloc(){
 	printf("\nGAGAL MENGALOKASIKAN MEMORI\n");
 }
 
+void viewAllFolders(treeAddress parent, traversalType traversal){
+	switch(traversal){
+		case inOrder:{
+			if(isEmpty(parent)) return;
+			
+			treeAddress firstChild = parent->sonAddress;
+			if(!isEmpty(firstChild)) {viewAllFolders(firstChild, inOrder);}
+
+			printf("%s\n", parent->folderName); //akses diri sendiri
+
+			if(!isEmpty(firstChild)){
+				treeAddress sibling = firstChild->nextBrotherAddress;
+				while(!isEmpty(sibling)){
+					viewAllFolders(sibling, inOrder);
+					sibling = sibling->nextBrotherAddress;
+				}
+			}
+		
+			break;
+		}
+		case preOrder:{
+			if(isEmpty(parent)) return;
+			printf("%s\n", (parent)->folderName);
+
+			treeAddress temp = (parent)->sonAddress;	//kalo leaf, temp = NULL
+			while(!isEmpty(temp)){
+				treeAddress next = temp->nextBrotherAddress;	//temp bakal dihapus
+				viewAllFolders(temp, postOrder);
+				temp = next;
+			}
+
+			break;
+		}
+		case postOrder:{
+			if(isEmpty(parent)) return;
+
+			treeAddress temp = (parent)->sonAddress;	//kalo leaf, temp = NULL
+			while(!isEmpty(temp)){
+				treeAddress next = temp->nextBrotherAddress;	//temp bakal dihapus
+				viewAllFolders(temp, postOrder);
+				temp = next;
+			}
+			printf("%s\n", (parent)->folderName);
+
+			break;
+		}
+		case byLevel:{
+			printf("malas, harus pake Q dulu :D\n");
+			
+			break;
+		}
+		default:{
+			printf("JENIS TRAVERSAL TIDAK DIKENALI\n");
+			break;
+		}
+	}
+}
+
 void createMemory(treeAddress * folderPointer){
 	(*folderPointer) = (treeAddress)malloc(sizeof(treeNode));
 
@@ -35,95 +93,19 @@ void nodeNaming(treeAddress * currentFolder, name newName){
 	(*currentFolder)->folderName = newName;
 }
 
-//mencari dan mengembalikan son sampai ke bawah-bawah nya
+//mencari dan mengembalikan son sampai ke bawah-bawah nya menggunakan rekursif
 treeAddress searchTreeNode(treeAddress currentPath, name target){
-	//cek kalo si currentPath itu bukan NULL dan punya anak
-	if(isEmpty(currentPath) || isEmpty((currentPath)->sonAddress)) return NULL;
+	if(isEmpty(currentPath)) return NULL;
+	if(strcmp(currentPath->folderName, target) == 0) return currentPath;
 
-	//quick search ke son yang deket-deket
-	treeAddress temp = searchTreeNodeSon(currentPath, target);
-	//kalo ternyata beneran ada, langsung direturn aja
-	if(!isEmpty(temp)) return temp;
-
-	treeAddress temp1 = temp;
-	//nyari son yang punya anak
-	temp = notLeafSon(currentPath);
-
-	while(temp != currentPath){
-		//cadangan
-		temp1 = temp;
-		//nyari son yang punya anak
-		temp = notLeafSon(temp);
-		printf("%s\n", temp->folderName);
-
-		//null kalo ternyata si temp itu leaf
-		if(isEmpty(temp)){
-			temp = temp1->parentAddress;
-			if(!isEmpty(temp)) temp = temp->nextBrotherAddress;
-		}
-
-		//kalo misal semua son nya gak pada punya anak
-		else if(temp == temp1){
-			treeAddress son = temp->sonAddress;
-
-			//quick search ke son dari temp, karena temp gak punya
-			//son yang punya anak lagi
-			son = searchTreeNodeSon(temp, target);
-		
-			//kalo ternyata beneran ada, langsung direturn aja
-			if(!isEmpty(son)) return son;
-
-			//kalo gak ada, temp bakal dipindahin ke brothernya
-			temp = (temp)->nextBrotherAddress;
-
-			//kalo ternyata dia adalah brother paling ujung,
-			//maka dia bakal dikembaliin ke parent nya
-			if(isEmpty(temp)) temp = temp->parentAddress;
-			//tapi kalo bukan, diquick search dulu
-			else{
-				son = searchTreeNodeSon(temp, target);
-				if(!isEmpty(son)) return son;	}}
-
-		//kalo masih punya son yang punya anak,
-		//coba buat quick search dulu, siapa tau ada
-		else{
-			treeAddress son = temp->sonAddress;
-			son = searchTreeNode(temp, target);
-			
-			if(!isEmpty(son)) return  son;
-			temp = (temp)->nextBrotherAddress;
-		}
-	}
-
-	printf("\nFOLDER TIDAK DITEMUKAN, MENGEMBALIKAN NULL\n");
-	return NULL;	
-}
-
-//mencari dan mengembalikan target hanya sampai son saja, gak sampai bawah-bawah nya
-treeAddress searchTreeNodeSon(treeAddress currentPath, name target){
-	if(isEmpty(currentPath) || isEmpty((currentPath)->sonAddress)) return NULL;
-
-	currentPath = (currentPath)->sonAddress;
-	while(!isEmpty(currentPath)){
-		if(strcmp(currentPath->folderName, target) == 0) return currentPath;
-
-		currentPath = currentPath->nextBrotherAddress;
+	treeAddress temp = currentPath->sonAddress;
+	while(!isEmpty(temp)){
+		treeAddress result = searchTreeNode(temp, target);
+		if(!isEmpty(result)) return result;
+		temp = temp->nextBrotherAddress;
 	}
 
 	return NULL;
-}
-
-//mengembalikan son pertama yang memiliki anak
-treeAddress notLeafSon(treeAddress parent){
-	if(isEmpty(parent) || isEmpty((parent)->sonAddress)) return NULL;
-	treeAddress temp = parent->sonAddress;
-
-	while(!isEmpty(temp)){
-		if(!isEmpty(temp->sonAddress)) return temp;
-
-		temp = temp->nextBrotherAddress;
-	}
-	return parent;
 }
 
 void insertTreeNode(treeAddress * parent, treeAddress * son){
@@ -142,7 +124,7 @@ void insertTreeNode(treeAddress * parent, treeAddress * son){
 }
 
 void showSons(treeAddress currentPath){
-	if(isEmpty(currentPath)) return;
+	if(isEmpty(currentPath)) {printf("\nNULLL\n"); return;}
 	treeAddress temp = currentPath->sonAddress;
 
 	unsigned short i = 0;
@@ -220,16 +202,19 @@ void deleteNode(treeAddress * target){
 	deAlokasi(target);
 }
 
+// delete menggunakan postorder travrsal
 void massDelete(treeAddress * target){
-	if(isEmpty(*target) || isEmpty((*target)->sonAddress)){return;}
+	if(isEmpty(*target)) return;
 
-	treeAddress temp = (*target)->sonAddress;
-	treeAddress temp1 = NULL;
-	while(!isEmpty((*target)->sonAddress)){
-		temp1 = temp->nextBrotherAddress;
-		deleteNode(&temp);
-		temp = temp1;
+	treeAddress temp = (*target)->sonAddress;	//kalo leaf, temp = NULL
+	while(!isEmpty(temp)){
+		treeAddress next = temp->nextBrotherAddress;	//temp bakal dihapus
+		massDelete(&temp);
+		temp = next;
 	}
+	deleteNode(target);
+
+	return;
 }
 
 unsigned short getCurrentLevel(treeAddress currentPath){
