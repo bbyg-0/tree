@@ -1,4 +1,6 @@
 #include "treeNode.h"
+#include "Q.h"
+#include "common.h"
 
 #include <stdlib.h>
 #include <stdbool.h>
@@ -9,6 +11,34 @@
 void failedMalloc(){
 	printf("\nGAGAL MENGALOKASIKAN MEMORI\n");
 }
+
+unsigned short nbFolders(treeAddress root, unsigned short result){
+	if(isEmpty(root)) return result;
+	result++;
+
+	treeAddress temp = (root)->sonAddress;	//kalo leaf, temp = NULL
+	while(!isEmpty(temp)){
+		result = nbFolders(temp, result);
+		temp = temp->nextBrotherAddress;
+	}
+
+	return result;
+}
+unsigned short treeHeight(treeAddress root, unsigned short result){
+	if(isEmpty(root)) return result;
+	
+	treeAddress temp = (root)->sonAddress;
+	while(!isEmpty(temp)){
+		result = nbFolders(temp, result);
+		temp = temp->nextBrotherAddress;
+		result -= 2;
+		printf("%hu\n", result);
+	}
+	result++;
+
+	return result;
+}
+
 
 void viewAllFolders(treeAddress parent, traversalType traversal){
 	switch(traversal){
@@ -37,7 +67,7 @@ void viewAllFolders(treeAddress parent, traversalType traversal){
 			treeAddress temp = (parent)->sonAddress;	//kalo leaf, temp = NULL
 			while(!isEmpty(temp)){
 				treeAddress next = temp->nextBrotherAddress;	//temp bakal dihapus
-				viewAllFolders(temp, postOrder);
+				viewAllFolders(temp, preOrder);
 				temp = next;
 			}
 
@@ -57,8 +87,35 @@ void viewAllFolders(treeAddress parent, traversalType traversal){
 			break;
 		}
 		case byLevel:{
-			printf("malas, harus pake Q dulu :D\n");
-			
+			qAddress temp = NULL;
+			qAddress head = NULL;
+
+			qCreateMemory(&temp);
+			isiQ(&temp, parent);
+			insertQ(&head, &temp);
+
+			while(!isEmpty(head)){
+				treeAddress current = deQ(&head);
+				printf("%s\n", current->folderName);
+
+				treeAddress child = current->sonAddress;
+				//printf("XXXX%s", child->folderName);
+				if(isEmpty(child))printf("%s gak punya anak\n", current->folderName);
+				else printf("%s punya anak\n", current->folderName);
+				while(!isEmpty(child)){
+					//nge enque si semua anak dari parent
+					qCreateMemory(&temp);
+					isiQ(&temp, child);
+					insertQ(&head, &temp);
+
+					printf("====%s", child->folderName);
+					child = child->nextBrotherAddress;
+				}
+				printf("\n");
+			}
+
+			printf("\nBERES\n");
+
 			break;
 		}
 		default:{
@@ -228,10 +285,6 @@ unsigned short getCurrentLevel(treeAddress currentPath){
 	result--;
 
 	return result;
-}
-
-bool isEmpty(void * currentPath){
-	return (currentPath == NULL);
 }
 
 void deAlokasi (treeAddress * target){

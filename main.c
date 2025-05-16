@@ -63,6 +63,9 @@ int main(void){
 
 	pwd = searchTreeNode(root, "Root");
 
-	viewAllFolders(root, inOrder);
+	viewAllFolders(root, byLevel);
+
+	//printf("\nHEIGHT = %hu\n", treeHeight(root, 0));
+
 	return 0;
 }

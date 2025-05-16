@@ -1,6 +1,8 @@
 #ifndef TREE_H
 #define TREE_H
 
+#include "common.h"
+
 #include <stdbool.h>
 
 typedef struct tree *treeAddress;
@@ -23,6 +25,10 @@ typedef enum{
 
 void failedMalloc();
 
+unsigned short nbFolders(treeAddress root, unsigned short result);
+
+unsigned short treeHeight(treeAddress root, unsigned short result);
+
 void viewAllFolders(treeAddress parent, traversalType traversal);
 
 void createMemory(treeAddress * folderPointer);
@@ -44,8 +50,6 @@ void deleteNode(treeAddress * target);
 void massDelete(treeAddress * target);
 
 unsigned short getCurrentLevel(treeAddress currentPath);
-
-bool isEmpty (void * currentPath);
 
 void deAlokasi (treeAddress * target);
 
