@@ -32,13 +32,12 @@ treeAddress deQ (qAddress *head){
 		deAlokasiQ(head);
 		return result;
 	}
-
 	qAddress temp = (*head);
-	while(!isEmpty((*head)->next)){
+	while(!isEmpty((*head)->next->next)){
 		(*head) = (*head)->next;
 	}
-	treeAddress result = (*head)->x;
-	deAlokasiQ(head);
+	treeAddress result = (*head)->next->x;
+	deAlokasiQ(&((*head)->next));
 	
 
 	(*head) = temp;
