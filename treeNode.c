@@ -101,7 +101,6 @@ void viewAllFolders(treeAddress parent, traversalType traversal){
 				treeAddress child = current->sonAddress;
 				//if(isEmpty(child))printf("%s gak punya anak\n", current->folderName);
 				//else printf("%s punya anak\n", current->folderName);
-				if(isEmpty(child)) printf("ASELOLE");
 				while(!isEmpty(child)){
 					//nge enque si semua anak dari parent
 					qCreateMemory(&temp);
@@ -110,10 +109,7 @@ void viewAllFolders(treeAddress parent, traversalType traversal){
 
 					child = child->nextBrotherAddress;
 				}
-				printf("\n");
 			}
-
-			printf("\nBERES\n");
 
 			break;
 		}
